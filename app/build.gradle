@@ -1,0 +1,35 @@
+apply plugin: 'android'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.3"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile 'com.deviantart.android.sdk:core-lib:+@aar'
+    compile 'org.scribe:scribe:1.3.+'
+    compile 'com.octo.android.robospice:robospice:1.4.+'
+}
