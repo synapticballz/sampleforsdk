@@ -42,7 +42,7 @@ public class DVNTSampleBaseActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DVNTOAuth.openSession(this, getApiKey(), getApiSecret(), SAMPLE_SCOPE);
+        DVNTOAuth.getSession(this, getApiKey(), getApiSecret(), SAMPLE_SCOPE);
     }
 
     @Override
