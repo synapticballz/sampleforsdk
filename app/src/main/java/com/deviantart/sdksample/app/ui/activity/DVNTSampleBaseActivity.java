@@ -11,6 +11,7 @@ import com.wonderlands.sdk.api.listener.DVNTAsyncRequestListener;
 import com.wonderlands.sdk.api.model.DVNTDeviationCommentsThread;
 import com.wonderlands.sdk.api.model.DVNTDeviationInfo;
 import com.wonderlands.sdk.api.model.DVNTDeviationStats;
+import com.wonderlands.sdk.api.model.DVNTMoreLikeThisAndFromArtistResults;
 import com.wonderlands.sdk.api.model.DVNTPlacebo;
 import com.wonderlands.sdk.api.model.DVNTUserInfo;
 import com.wonderlands.sdk.oauth.DVNTOAuth;
@@ -28,6 +29,7 @@ public class DVNTSampleBaseActivity extends Activity {
 
     private static final String TAG = "DVNTSampleBaseActivity";
     private static final String SAMPLE_SCOPE = "basic daprivate";
+    public static final int APP_DEVIATION_ID = 416026638;
 
     public String getApiKey() {
         Log.e(TAG, "Using SDK default API KEY : please override getApiKey() in this activity");
@@ -109,7 +111,7 @@ public class DVNTSampleBaseActivity extends Activity {
             }
         });
 
-        DVNTAsyncAPI.with(this).commentsForDeviation(416026638, null, null, null, new DVNTAsyncRequestListener<DVNTDeviationCommentsThread>() {
+        DVNTAsyncAPI.with(this).commentsForDeviation(APP_DEVIATION_ID, null, null, null, new DVNTAsyncRequestListener<DVNTDeviationCommentsThread>() {
             @Override
             public void onSuccess(DVNTDeviationCommentsThread dvntDeviationCommentsThread) {
                 Toast.makeText(DVNTSampleBaseActivity.this, "Fetched " + dvntDeviationCommentsThread.getComments().size() + " comments ", Toast.LENGTH_SHORT).show();
@@ -121,6 +123,17 @@ public class DVNTSampleBaseActivity extends Activity {
             }
         });
 
+        DVNTAsyncAPI.with(this).moreLikeThisAndFromArtist(APP_DEVIATION_ID, new DVNTAsyncRequestListener<DVNTMoreLikeThisAndFromArtistResults>() {
+            @Override
+            public void onSuccess(DVNTMoreLikeThisAndFromArtistResults dvntMoreLikeThisAndFromArtistResults) {
+                Toast.makeText(DVNTSampleBaseActivity.this, "found " + dvntMoreLikeThisAndFromArtistResults.getMoreFromArtist().size() + " more deviations from this artist", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(DVNTSampleBaseActivity.this, "moreLikeThisAndFromArtist ASYNC FAILURE : " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
