@@ -5,28 +5,29 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.wonderlands.sdk.DVNTConsts;
 import com.wonderlands.sdk.api.DVNTAsyncAPI;
+import com.wonderlands.sdk.api.DVNTBrowseMode;
 import com.wonderlands.sdk.api.listener.DVNTAsyncRequestListener;
-import com.wonderlands.sdk.api.model.DVNTGroupInfo;
+import com.wonderlands.sdk.api.model.DVNTDeviationCommentsThread;
+import com.wonderlands.sdk.api.model.DVNTDeviationInfo;
+import com.wonderlands.sdk.api.model.DVNTDeviationStats;
 import com.wonderlands.sdk.api.model.DVNTPlacebo;
 import com.wonderlands.sdk.api.model.DVNTUserInfo;
 import com.wonderlands.sdk.oauth.DVNTOAuth;
 
 /**
  * Sample Activity for SDK.
- *
+ * <p/>
  * Shows standard OAuth session opening/closing + API calls.
- *
+ * <p/>
  * //TODO put this sample in its own module.
- *
+ * <p/>
  * Created by drommk on 11/21/13.
  */
 public class DVNTSampleBaseActivity extends Activity {
 
     private static final String TAG = "DVNTSampleBaseActivity";
-    private static final boolean mementoMode = false;
-    private static final String SAMPLE_SCOPE = DVNTConsts.BASIC_SCOPE + " " + DVNTConsts.GROUP_SCOPE;
+    private static final String SAMPLE_SCOPE = "basic daprivate";
 
     public String getApiKey() {
         Log.e(TAG, "Using SDK default API KEY : please override getApiKey() in this activity");
@@ -57,7 +58,7 @@ public class DVNTSampleBaseActivity extends Activity {
             @Override
             public void onSuccess(DVNTPlacebo placeboResult) {
                 String text = "access token";
-                if (placeboResult.wasSuccessful()) {
+                if ("success".equals(placeboResult.getStatus())) {
                     text += " is correct";
                 } else {
                     text += " is incorrect";
@@ -80,31 +81,46 @@ public class DVNTSampleBaseActivity extends Activity {
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(DVNTSampleBaseActivity.this, "WHOAMI ASYNC FAILURE : " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(DVNTSampleBaseActivity.this, "WhoAmI ASYNC FAILURE : " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
-        final String groupName = "hq";
-
-        DVNTAsyncAPI.with(this).getGroupInfo(groupName, new DVNTAsyncRequestListener<DVNTGroupInfo>() {
+        DVNTAsyncAPI.with(this).browse(DVNTBrowseMode.POPULAR, null, null, null, null, null, null, new DVNTAsyncRequestListener<DVNTDeviationInfo.List>() {
             @Override
-            public void onSuccess(DVNTGroupInfo groupInfo) {
-                StringBuilder builder = new StringBuilder("I am ");
-                if (!groupInfo.getIsMember()) {
-                    builder.append("not ");
-                }
-                builder.append("a member of " + groupName);
-                Toast.makeText(DVNTSampleBaseActivity.this, builder.toString(), Toast.LENGTH_SHORT).show();
-                if (mementoMode) {
-                    DVNTOAuth.logout(DVNTSampleBaseActivity.this);
-                }
+            public void onSuccess(DVNTDeviationInfo.List resultStream) {
+                Toast.makeText(DVNTSampleBaseActivity.this, "Browsed " + resultStream.size() + " deviations ", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(DVNTSampleBaseActivity.this, "GROUPINFO ASYNC FAILURE : " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(DVNTSampleBaseActivity.this, "Browse ASYNC FAILURE : " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
+        DVNTAsyncAPI.with(this).feedbackCounts(0, 10, new DVNTAsyncRequestListener<DVNTDeviationStats.List>() {
+            @Override
+            public void onSuccess(DVNTDeviationStats.List stats) {
+                Toast.makeText(DVNTSampleBaseActivity.this, "Fetched " + stats.size() + " stats ", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(DVNTSampleBaseActivity.this, "DeviationStats ASYNC FAILURE : " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        DVNTAsyncAPI.with(this).commentsForDeviation(416026638, null, null, null, new DVNTAsyncRequestListener<DVNTDeviationCommentsThread>() {
+            @Override
+            public void onSuccess(DVNTDeviationCommentsThread dvntDeviationCommentsThread) {
+                Toast.makeText(DVNTSampleBaseActivity.this, "Fetched " + dvntDeviationCommentsThread.getComments().size() + " comments ", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(DVNTSampleBaseActivity.this, "commentsForDeviation ASYNC FAILURE : " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     @Override
