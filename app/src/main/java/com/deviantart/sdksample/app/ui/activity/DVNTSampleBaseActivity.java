@@ -5,16 +5,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.wonderlands.sdk.api.DVNTAsyncAPI;
-import com.wonderlands.sdk.api.DVNTBrowseMode;
-import com.wonderlands.sdk.api.listener.DVNTAsyncRequestListener;
-import com.wonderlands.sdk.api.model.DVNTDeviationCommentsThread;
-import com.wonderlands.sdk.api.model.DVNTDeviationInfo;
-import com.wonderlands.sdk.api.model.DVNTDeviationStats;
-import com.wonderlands.sdk.api.model.DVNTMoreLikeThisResults;
-import com.wonderlands.sdk.api.model.DVNTPlacebo;
-import com.wonderlands.sdk.api.model.DVNTUserInfo;
-import com.wonderlands.sdk.oauth.DVNTOAuth;
+import com.deviantart.android.sdk.api.DVNTAsyncAPI;
+import com.deviantart.android.sdk.api.DVNTBrowseMode;
+import com.deviantart.android.sdk.api.listener.DVNTAsyncRequestListener;
+import com.deviantart.android.sdk.api.model.DVNTDeviationCommentsThread;
+import com.deviantart.android.sdk.api.model.DVNTDeviationInfo;
+import com.deviantart.android.sdk.api.model.DVNTDeviationStats;
+import com.deviantart.android.sdk.api.model.DVNTMoreLikeThisResults;
+import com.deviantart.android.sdk.api.model.DVNTPlacebo;
+import com.deviantart.android.sdk.api.model.DVNTUserInfo;
+import com.deviantart.android.sdk.oauth.DVNTOAuth;
+
 
 /**
  * Sample Activity for SDK.
