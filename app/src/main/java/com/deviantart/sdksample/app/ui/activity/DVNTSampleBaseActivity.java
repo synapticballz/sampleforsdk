@@ -11,7 +11,7 @@ import com.wonderlands.sdk.api.listener.DVNTAsyncRequestListener;
 import com.wonderlands.sdk.api.model.DVNTDeviationCommentsThread;
 import com.wonderlands.sdk.api.model.DVNTDeviationInfo;
 import com.wonderlands.sdk.api.model.DVNTDeviationStats;
-import com.wonderlands.sdk.api.model.DVNTMoreLikeThisAndFromArtistResults;
+import com.wonderlands.sdk.api.model.DVNTMoreLikeThisResults;
 import com.wonderlands.sdk.api.model.DVNTPlacebo;
 import com.wonderlands.sdk.api.model.DVNTUserInfo;
 import com.wonderlands.sdk.oauth.DVNTOAuth;
@@ -123,9 +123,9 @@ public class DVNTSampleBaseActivity extends Activity {
             }
         });
 
-        DVNTAsyncAPI.with(this).moreLikeThisAndFromArtist(APP_DEVIATION_ID, new DVNTAsyncRequestListener<DVNTMoreLikeThisAndFromArtistResults>() {
+        DVNTAsyncAPI.with(this).moreLikeThis(APP_DEVIATION_ID, new DVNTAsyncRequestListener<DVNTMoreLikeThisResults>() {
             @Override
-            public void onSuccess(DVNTMoreLikeThisAndFromArtistResults dvntMoreLikeThisAndFromArtistResults) {
+            public void onSuccess(DVNTMoreLikeThisResults dvntMoreLikeThisAndFromArtistResults) {
                 Toast.makeText(DVNTSampleBaseActivity.this, "found " + dvntMoreLikeThisAndFromArtistResults.getMoreFromArtist().size() + " more deviations from this artist", Toast.LENGTH_SHORT).show();
             }
 
