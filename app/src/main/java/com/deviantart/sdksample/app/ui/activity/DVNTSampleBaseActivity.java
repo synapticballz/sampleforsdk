@@ -18,11 +18,9 @@ import com.wonderlands.sdk.oauth.DVNTOAuth;
 
 /**
  * Sample Activity for SDK.
- * <p/>
+ *
  * Shows standard OAuth session opening/closing + API calls.
- * <p/>
- * //TODO put this sample in its own module.
- * <p/>
+ *
  * Created by drommk on 11/21/13.
  */
 public class DVNTSampleBaseActivity extends Activity {
