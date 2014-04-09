@@ -29,8 +29,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.deviantart.android.sdk:core-lib:+@aar'
-    compile 'org.scribe:scribe:1.3.+'
-    compile 'com.octo.android.robospice:robospice:1.4.+'
-    compile 'com.octo.android.robospice:robospice-retrofit:1.4.+'
+    compile ('com.deviantart.android.sdk:core-lib:+@aar') {
+        transitive=true
+    }
 }
