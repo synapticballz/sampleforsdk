@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:theme="@style/SampleAppTheme">
         <activity
-            android:name="com.deviantart.sdksample.app.ui.activity.DVNTSampleBaseActivity"
+            android:name=".ui.activity.SampleActivity"
             android:label="SDKSample"/>
     </application>
 
