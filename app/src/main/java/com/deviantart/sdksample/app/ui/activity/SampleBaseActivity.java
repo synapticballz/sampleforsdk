@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.deviantart.android.sdk.api.DVNTAsyncAPI;
-import com.deviantart.android.sdk.oauth.DVNTOAuth;
 
 /**
  * Base Activity handling the opening & closing of the OAuth Session.

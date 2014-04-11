@@ -12,7 +12,6 @@ import com.deviantart.android.sdk.api.model.DVNTDeviationStats;
 import com.deviantart.android.sdk.api.model.DVNTMoreLikeThisResults;
 import com.deviantart.android.sdk.api.model.DVNTPlacebo;
 import com.deviantart.android.sdk.api.model.DVNTUserInfo;
-import com.deviantart.android.sdk.oauth.DVNTOAuth;
 
 
 /**
