@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.deviantart.android.sdk.api.DVNTAsyncAPI;
 import com.deviantart.android.sdk.oauth.DVNTOAuth;
 
 /**
@@ -22,7 +23,7 @@ public class SampleBaseActivity  extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DVNTOAuth.getSession(this, getApiKey(), getApiSecret(), getSampleScope());
+        DVNTAsyncAPI.start(this, getApiKey(), getApiSecret(), getSampleScope());
     }
 
     public String getApiKey() {
@@ -41,7 +42,7 @@ public class SampleBaseActivity  extends Activity{
 
     @Override
     protected void onDestroy() {
-        DVNTOAuth.closeSession(this);
+        DVNTAsyncAPI.stop(this);
         super.onDestroy();
     }
 }

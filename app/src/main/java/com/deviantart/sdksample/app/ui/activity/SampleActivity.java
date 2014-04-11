@@ -26,7 +26,7 @@ public class SampleActivity extends SampleBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!DVNTOAuth.isReady()) {
+        if (!DVNTAsyncAPI.isReady()) {
             Log.d("SampleActivity", "API is not ready");
             return;
         }
