@@ -13,12 +13,12 @@ import com.deviantart.android.sdk.api.model.DVNTDeviationStats;
 import com.deviantart.android.sdk.api.model.DVNTEndpointError;
 import com.deviantart.android.sdk.api.model.DVNTMoreLikeThisResults;
 import com.deviantart.android.sdk.api.model.DVNTPlacebo;
+import com.deviantart.android.sdk.api.model.DVNTStashFolderMetadata;
 import com.deviantart.android.sdk.api.model.DVNTStashSubmitResponse;
 import com.deviantart.android.sdk.api.model.DVNTUserInfo;
 import com.deviantart.sdksample.app.R;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +49,16 @@ public class SampleActivity extends SampleBaseActivity {
         asyncDamnToken();
         asyncStashSubmitTextFile();
         asyncStashSubmitImage();
+        asynStashFolderMetatada();
+    }
+
+    private void asynStashFolderMetatada() {
+        DVNTAsyncAPI.with(this).stashFolderMetadata(5642705538161565L, new SampleAsyncListener<DVNTStashFolderMetadata>() {
+            @Override
+            public void onSuccess(DVNTStashFolderMetadata metadata) {
+                Toast.makeText(SampleActivity.this, "retrieved folder title = " + metadata.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void asyncStashSubmitImage() {
