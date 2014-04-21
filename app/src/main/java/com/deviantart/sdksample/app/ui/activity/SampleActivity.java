@@ -13,7 +13,10 @@ import com.deviantart.android.sdk.api.model.DVNTDeviationStats;
 import com.deviantart.android.sdk.api.model.DVNTEndpointError;
 import com.deviantart.android.sdk.api.model.DVNTMoreLikeThisResults;
 import com.deviantart.android.sdk.api.model.DVNTPlacebo;
+import com.deviantart.android.sdk.api.model.DVNTStashDeleteResult;
 import com.deviantart.android.sdk.api.model.DVNTStashFolderMetadata;
+import com.deviantart.android.sdk.api.model.DVNTStashMedia;
+import com.deviantart.android.sdk.api.model.DVNTStashRenameFolderResult;
 import com.deviantart.android.sdk.api.model.DVNTStashSubmitResponse;
 import com.deviantart.android.sdk.api.model.DVNTUserInfo;
 import com.deviantart.sdksample.app.R;
@@ -32,6 +35,8 @@ import java.io.InputStream;
  * Created by drommk on 11/21/13.
  */
 public class SampleActivity extends SampleBaseActivity {
+    private Long createdStashId1;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -40,19 +45,19 @@ public class SampleActivity extends SampleBaseActivity {
             return;
         }
 
-        asyncPlacebo();
-        asyncWhoAmI();
-        asyncBrowsePopular();
-        asyncFeedbackCounts();
-        asyncCommentsForDeviation();
-        asyncMoreLikeThis();
-        asyncDamnToken();
-        asyncStashSubmitTextFile();
+//        asyncPlacebo();
+//        asyncWhoAmI();
+//        asyncBrowsePopular();
+//        asyncFeedbackCounts();
+//        asyncCommentsForDeviation();
+//        asyncMoreLikeThis();
+//        asyncDamnToken();
+        asyncStashSubmitLifeCycle();
         asyncStashSubmitImage();
-        asynStashFolderMetatada();
+        asyncStashFolderMetatada();
     }
 
-    private void asynStashFolderMetatada() {
+    private void asyncStashFolderMetatada() {
         DVNTAsyncAPI.with(this).stashFolderMetadata(5642705538161565L, new SampleAsyncListener<DVNTStashFolderMetadata>() {
             @Override
             public void onSuccess(DVNTStashFolderMetadata metadata) {
@@ -67,7 +72,7 @@ public class SampleActivity extends SampleBaseActivity {
 //        File outputFile = File.createTempFile("prefix", "txt", outputDir);
     }
 
-    private void asyncStashSubmitTextFile() {
+    private void asyncStashSubmitLifeCycle() {
         try {
             File outputDir = getCacheDir(); // context being the Activity pointer
             File outputFile = File.createTempFile("Lorem Ipsum", "txt", outputDir);
@@ -78,12 +83,49 @@ public class SampleActivity extends SampleBaseActivity {
             DVNTAsyncAPI.with(this).stashSubmitFile(outputFile, "text/html", "testTitle", new SampleAsyncListener<DVNTStashSubmitResponse>() {
                 @Override
                 public void onSuccess(DVNTStashSubmitResponse submitResponse) {
+                    createdStashId1 = submitResponse.getStashId();
                     Toast.makeText(SampleActivity.this, "submitted file in stashid = " + submitResponse.getStashId(), Toast.LENGTH_SHORT).show();
+
+                    //ORIGINAL MEDIA
+                    asyncStashMedia();
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void asyncStashRenameFolder() {
+        DVNTAsyncAPI.with(this).stashRenameFolder(5642705538161565L, "new_name", new SampleAsyncListener<DVNTStashRenameFolderResult>() {
+            @Override
+            public void onSuccess(DVNTStashRenameFolderResult result) {
+                Toast.makeText(SampleActivity.this, "renamed folder : " + result.getStatus(), Toast.LENGTH_SHORT).show();
+
+                //DELETE
+                asyncStashDelete();
+            }
+        });
+    }
+
+    private void asyncStashMedia() {
+        DVNTAsyncAPI.with(this).stashMedia(createdStashId1, new SampleAsyncListener<DVNTStashMedia>() {
+            @Override
+            public void onSuccess(DVNTStashMedia stashMedia) {
+                Toast.makeText(SampleActivity.this, "stash original media URL : " + stashMedia.getOriginalURL(), Toast.LENGTH_SHORT).show();
+
+                //RENAME FOLDER
+                asyncStashRenameFolder();
+            }
+        });
+    }
+
+    private void asyncStashDelete() {
+        DVNTAsyncAPI.with(this).stashDelete(createdStashId1, new SampleAsyncListener<DVNTStashDeleteResult>() {
+            @Override
+            public void onSuccess(DVNTStashDeleteResult deleteResult) {
+                Toast.makeText(SampleActivity.this, "stash deletion status : " + deleteResult.getStatus(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void asyncDamnToken() {
