@@ -16,13 +16,17 @@ public class SampleBaseActivity  extends Activity{
     private static final String TAG = "SampleActivity";
     private static final String SAMPLE_SCOPE = "basic daprivate";
     public static final int SAMPLE_APP_DEVIATION_ID = 416026638;
+    private boolean alwaysLogin = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DVNTAsyncAPI.start(this, getApiKey(), getApiSecret(), getSampleScope());
+        if (alwaysLogin) {
+            DVNTAsyncAPI.resetAll(this);
+        }
+        DVNTAsyncAPI.start(this, getApiKey(), getApiSecret(), getSampleScope(), true);
     }
 
     public String getApiKey() {

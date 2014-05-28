@@ -14,17 +14,21 @@ import com.deviantart.android.sdk.api.model.DVNTEndpointError;
 import com.deviantart.android.sdk.api.model.DVNTMoreLikeThisResults;
 import com.deviantart.android.sdk.api.model.DVNTPlacebo;
 import com.deviantart.android.sdk.api.model.DVNTStashDeleteResult;
-import com.deviantart.android.sdk.api.model.DVNTStashFolderMetadata;
+import com.deviantart.android.sdk.api.model.DVNTStashDelta;
+import com.deviantart.android.sdk.api.model.DVNTStashEntryMetadata;
 import com.deviantart.android.sdk.api.model.DVNTStashMedia;
+import com.deviantart.android.sdk.api.model.DVNTStashMoveFileResponse;
 import com.deviantart.android.sdk.api.model.DVNTStashRenameFolderResult;
+import com.deviantart.android.sdk.api.model.DVNTStashSpace;
 import com.deviantart.android.sdk.api.model.DVNTStashSubmitResponse;
-import com.deviantart.android.sdk.api.model.DVNTUserInfo;
+import com.deviantart.android.sdk.api.model.DVNTWhoAmIResponse;
 import com.deviantart.sdksample.app.R;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 
 /**
@@ -35,6 +39,7 @@ import java.io.InputStream;
  * Created by drommk on 11/21/13.
  */
 public class SampleActivity extends SampleBaseActivity {
+    public static final long TEST_FOLDER_STASHID = 5642705538161565L;
     private Long createdStashId1;
 
     @Override
@@ -45,22 +50,65 @@ public class SampleActivity extends SampleBaseActivity {
             return;
         }
 
+//        asyncGroupedCalls();
 //        asyncPlacebo();
 //        asyncWhoAmI();
-//        asyncBrowsePopular();
+        asyncBrowsePopular();
 //        asyncFeedbackCounts();
 //        asyncCommentsForDeviation();
 //        asyncMoreLikeThis();
 //        asyncDamnToken();
-        asyncStashSubmitLifeCycle();
-        asyncStashSubmitImage();
-        asyncStashFolderMetatada();
+//        asyncStashSubmitLifeCycle();
+////        asyncStashSubmitImage();
+//        asyncStashFolderMetatada();
+////        asyncStashSpace();
+//        asyncStashDelta();
+    }
+
+    private void asyncGroupedCalls() {
+        DVNTAsyncAPI.buildGroupedRequest(this)
+                .addPlacebo("test1")
+                .addMoreLikeThis("test2", SAMPLE_APP_DEVIATION_ID)
+                .execute(new SampleAsyncListener<HashMap<String, Object>>() {
+                    @Override
+                    public void onSuccess(HashMap<String, Object> o) {
+                        Toast.makeText(SampleActivity.this, "soooo : ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void asyncStashMoveFile() {
+        DVNTAsyncAPI.with(this).stashMoveFileInto(createdStashId1, TEST_FOLDER_STASHID, new SampleAsyncListener<DVNTStashMoveFileResponse>() {
+            @Override
+            public void onSuccess(DVNTStashMoveFileResponse response) {
+                Toast.makeText(SampleActivity.this, "moved file : " + response.getStatus(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void asyncStashDelta() {
+        DVNTAsyncAPI.with(this).stashDelta(null, 0, 100, new SampleAsyncListener<DVNTStashDelta>() {
+            @Override
+            public void onSuccess(DVNTStashDelta delta) {
+                Toast.makeText(SampleActivity.this, "delta returned : " + delta.getEntries().size() + "entries", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void asyncStashSpace() {
+        DVNTAsyncAPI.with(this).stashSpace(new SampleAsyncListener<DVNTStashSpace>() {
+            @Override
+            public void onSuccess(DVNTStashSpace space) {
+                Toast.makeText(SampleActivity.this, "available space : " + space.getAvailableSpace() + " / " + space.getTotalSpace(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void asyncStashFolderMetatada() {
-        DVNTAsyncAPI.with(this).stashFolderMetadata(5642705538161565L, new SampleAsyncListener<DVNTStashFolderMetadata>() {
+        DVNTAsyncAPI.with(this).stashFolderMetadata(TEST_FOLDER_STASHID, new SampleAsyncListener<DVNTStashEntryMetadata>() {
             @Override
-            public void onSuccess(DVNTStashFolderMetadata metadata) {
+            public void onSuccess(DVNTStashEntryMetadata metadata) {
                 Toast.makeText(SampleActivity.this, "retrieved folder title = " + metadata.getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -86,7 +134,7 @@ public class SampleActivity extends SampleBaseActivity {
                     createdStashId1 = submitResponse.getStashId();
                     Toast.makeText(SampleActivity.this, "submitted file in stashid = " + submitResponse.getStashId(), Toast.LENGTH_SHORT).show();
 
-                    //ORIGINAL MEDIA
+                    //get original media info
                     asyncStashMedia();
                 }
             });
@@ -96,7 +144,7 @@ public class SampleActivity extends SampleBaseActivity {
     }
 
     private void asyncStashRenameFolder() {
-        DVNTAsyncAPI.with(this).stashRenameFolder(5642705538161565L, "new_name", new SampleAsyncListener<DVNTStashRenameFolderResult>() {
+        DVNTAsyncAPI.with(this).stashRenameFolder(TEST_FOLDER_STASHID, "new_name", new SampleAsyncListener<DVNTStashRenameFolderResult>() {
             @Override
             public void onSuccess(DVNTStashRenameFolderResult result) {
                 Toast.makeText(SampleActivity.this, "renamed folder : " + result.getStatus(), Toast.LENGTH_SHORT).show();
@@ -174,9 +222,9 @@ public class SampleActivity extends SampleBaseActivity {
     }
 
     private void asyncWhoAmI() {
-        DVNTAsyncAPI.with(this).whoAmI(new SampleAsyncListener<DVNTUserInfo>() {
+        DVNTAsyncAPI.with(this).whoAmI(new SampleAsyncListener<DVNTWhoAmIResponse>() {
             @Override
-            public void onSuccess(DVNTUserInfo userInfo) {
+            public void onSuccess(DVNTWhoAmIResponse userInfo) {
                 Toast.makeText(SampleActivity.this, "I am " + userInfo.getUserName(), Toast.LENGTH_SHORT).show();
             }
         });
