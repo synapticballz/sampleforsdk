@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.deviantart.sdksample.app">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -10,7 +11,13 @@
         android:theme="@style/SampleAppTheme">
         <activity
             android:name=".ui.activity.SampleActivity"
-            android:label="SDKSample"/>
+            android:label="SDKSample">
+            <intent-filter>
+                <action android:name="com.example.test2.REQUEST_RESPONSE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
